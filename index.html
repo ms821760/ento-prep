@@ -18,6 +18,7 @@
   --accent:#95560F; --accent-ink:#FFFFFF; --accent-soft:#F3E3CC;
   --good:#2D7A44; --good-soft:#DCEFE1; --bad:#B0352D; --bad-soft:#F6DEDB; --var:#46668A; --var-soft:#DDE6F0;
   --chipL:86%; --chipLine:42%; --chipText:24%; --photo-bg:#1D211E;
+  --mA-bg:#E4E7EA; --mA-fg:#46505A; --mP-bg:#F6E6C6; --mP-fg:#7A4C08; --mH-bg:#D2ECE8; --mH-fg:#17655C; --mO-bg:#ECE0F3; --mO-fg:#67387F;
   --font-display:"Zilla Slab","Roboto Slab",Rockwell,Georgia,serif;
   --font-body:"Source Sans 3",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -27,12 +28,14 @@
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; --chipText:84%; color-scheme:dark } }
+  --chipL:26%; --chipLine:62%; --chipText:84%;
+  --mA-bg:#252B30; --mA-fg:#B7C0C9; --mP-bg:#382A12; --mP-fg:#EBBA68; --mH-bg:#11302C; --mH-fg:#78D2C6; --mO-bg:#2D2136; --mO-fg:#CDA6E6; color-scheme:dark } }
 :root[data-theme="dark"]{
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; --chipText:84%; color-scheme:dark }
+  --chipL:26%; --chipLine:62%; --chipText:84%;
+  --mA-bg:#252B30; --mA-fg:#B7C0C9; --mP-bg:#382A12; --mP-fg:#EBBA68; --mH-bg:#11302C; --mH-fg:#78D2C6; --mO-bg:#2D2136; --mO-fg:#CDA6E6; color-scheme:dark }
 
 *{box-sizing:border-box}
 html,body{background:var(--bg)}
@@ -105,14 +108,24 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:
 .tag.new{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .ord{--h:0;display:inline-flex;align-items:center;font-weight:700;font-size:13px;line-height:1.3;padding:2px 8px;border-radius:5px;background:hsl(var(--h) var(--s,48%) var(--chipL));color:hsl(var(--h) var(--s,65%) var(--chipText));border:1px solid hsl(var(--h) var(--s,45%) var(--chipLine));white-space:nowrap}
 .ord.lg{font-size:16px;padding:4px 11px;border-radius:6px}
-.row-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:3px 0 1px}
+.chip{display:inline-flex;align-items:center;font-weight:700;font-size:13px;line-height:1.3;padding:2px 8px;border-radius:5px;white-space:nowrap;border:1px solid transparent}
+.chip.lg,.sig.lg{font-size:16px;padding:4px 11px;border-radius:6px}
+.chip.mouth{background:var(--sunk);color:var(--ink);border-color:var(--line)}
+.chip.m-A{background:var(--mA-bg);color:var(--mA-fg);border-color:var(--mA-fg)}
+.chip.m-P{background:var(--mP-bg);color:var(--mP-fg);border-color:var(--mP-fg)}
+.chip.m-H{background:var(--mH-bg);color:var(--mH-fg);border-color:var(--mH-fg)}
+.chip.m-O{background:var(--mO-bg);color:var(--mO-fg);border-color:var(--mO-fg)}
+.chip.m-A,.chip.m-P,.chip.m-H,.chip.m-O{border-width:1px;border-style:solid}
+.row-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:4px 0 1px}
+.row .row-chips{grid-column:1/-1;margin:0;gap:5px}
+.row-chips.sm .ord,.row-chips.sm .chip,.row-chips.sm .sig{font-size:12px;padding:1px 6px;border-radius:4px}
 .ins-new-head{display:flex;flex-direction:column;gap:6px}
 .ins-new-head p{margin:0;color:var(--muted)}
 .renamed{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
 .renamed li+li{border-top:1px solid var(--line)}
 .renamed .was{font-size:13px;color:var(--muted)}
 .renamed .was s{color:var(--muted)}
-.sig{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
+.sig{display:inline-flex;align-items:center;font-size:13px;line-height:1.3;font-weight:700;border-radius:5px;padding:2px 8px;white-space:nowrap;border:1px solid currentColor}
 .sig-P{background:var(--bad-soft);color:var(--bad)}
 .sig-B{background:var(--good-soft);color:var(--good)}
 .sig-V{background:var(--var-soft);color:var(--var)}
@@ -232,9 +245,17 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
 .ph-track::-webkit-scrollbar{display:none}
 .ph-frame{flex:0 0 100%;aspect-ratio:4/3;scroll-snap-align:center;scroll-snap-stop:always;background-repeat:no-repeat;max-width:100%}
 .ph-meta{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
-.ph-dots{display:flex;gap:5px;flex:0 0 auto}
-.ph-dots i{width:7px;height:7px;border-radius:50%;background:var(--line)}
-.ph-dots i.on{background:var(--ink)}
+.ph-dots{display:flex;gap:2px;flex:0 0 auto}
+.ph-dots button{width:18px;height:18px;padding:0;border:0;background:none;display:grid;place-items:center}
+.ph-dots button::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--line)}
+.ph-dots button.on::before{background:var(--ink)}
+.ph-wrap{position:relative}
+.ph-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#18221C;font-size:28px;line-height:1;display:none;place-items:center;box-shadow:0 1px 6px rgba(0,0,0,.35);padding:0 0 3px}
+.ph-nav.prev{left:10px}.ph-nav.next{right:10px}
+.ph-nav:disabled{opacity:0;pointer-events:none}
+.ph-track.dragging{scroll-snap-type:none;cursor:grabbing}
+.ph-track:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (hover:hover) and (pointer:fine){ .ph-nav{display:grid} .ph-track{cursor:grab;user-select:none} }
 .ph-credit{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ph-credit a{color:var(--muted)}
 .ph-none{aspect-ratio:4/3;display:grid;place-items:center;background:var(--sunk);border-radius:10px;color:var(--muted);font-size:14px;padding:16px;text-align:center}
@@ -931,16 +952,31 @@ function galleryHTML(id, opts={}){
   const n = ph.c.length;
   const frames = ph.c.map((_,i)=>`<div class="ph-frame" role="img" aria-label="Photo ${i+1} of ${n}" style="background-image:url(photos/${id}.webp);background-size:${n*100}% 100%;background-position:${n>1?i/(n-1)*100:0}% 0"></div>`).join("");
   return `<div class="gallery" data-gal="${id}" data-start="${opts.start||0}">
-    <div class="ph-track">${frames}</div>
-    <div class="ph-meta"><span class="ph-credit"></span><span class="ph-dots">${n>1?ph.c.map((_,i)=>`<i></i>`).join(""):""}</span></div></div>`;
+    <div class="ph-wrap"><div class="ph-track" tabindex="0" aria-label="Photos, use arrow keys to change">${frames}</div>
+      ${n>1?`<button type="button" class="ph-nav prev" aria-label="Previous photo">‹</button><button type="button" class="ph-nav next" aria-label="Next photo">›</button>`:""}</div>
+    <div class="ph-meta"><span class="ph-credit"></span><span class="ph-dots">${n>1?ph.c.map((_,i)=>`<button type="button" aria-label="Photo ${i+1}"></button>`).join(""):""}</span></div></div>`;
 }
 function bindGalleries(root){
   root.querySelectorAll("[data-gal]").forEach(g=>{
-    const id=+g.dataset.gal, ph=PHOTOS[id], tr=g.querySelector(".ph-track"), cr=g.querySelector(".ph-credit"), dots=g.querySelectorAll(".ph-dots i");
-    const upd=()=>{ const i=Math.round(tr.scrollLeft/Math.max(1,tr.clientWidth)); const c=ph.c[Math.min(i,ph.c.length-1)];
+    const id=+g.dataset.gal, ph=PHOTOS[id], n=ph.c.length, tr=g.querySelector(".ph-track"), cr=g.querySelector(".ph-credit"),
+      dots=g.querySelectorAll(".ph-dots button"), prev=g.querySelector(".ph-nav.prev"), next=g.querySelector(".ph-nav.next");
+    const cur=()=>Math.max(0, Math.min(n-1, Math.round(tr.scrollLeft/Math.max(1,tr.clientWidth))));
+    const upd=()=>{ const i=cur(), c=ph.c[i];
       cr.innerHTML = `${esc(c[0])} · <a href="https://www.inaturalist.org/photos/${c[1]}" target="_blank" rel="noopener">iNaturalist</a>`;
-      dots.forEach((d,k)=>d.classList.toggle("on",k===i)); };
+      dots.forEach((d,k)=>d.classList.toggle("on",k===i));
+      if(prev){ prev.disabled = i===0; next.disabled = i===n-1; } };
+    const go=i=>{ i=Math.max(0,Math.min(n-1,i)); tr.scrollTo({left:i*tr.clientWidth, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
     tr.addEventListener("scroll",()=>requestAnimationFrame(upd),{passive:true});
+    if(prev){ prev.addEventListener("click",()=>go(cur()-1)); next.addEventListener("click",()=>go(cur()+1)); }
+    dots.forEach((d,k)=>d.addEventListener("click",()=>go(k)));
+    tr.addEventListener("keydown",e=>{ if(e.key==="ArrowRight"){ e.preventDefault(); go(cur()+1); } if(e.key==="ArrowLeft"){ e.preventDefault(); go(cur()-1); } });
+    /* mouse drag for computers (phones already swipe natively) */
+    let sx=0, sl=0, si=0, drag=false;
+    tr.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0) return; drag=true; sx=e.clientX; sl=tr.scrollLeft; si=cur(); tr.classList.add("dragging"); tr.setPointerCapture(e.pointerId); });
+    tr.addEventListener("pointermove",e=>{ if(drag) tr.scrollLeft = sl-(e.clientX-sx); });
+    const end=e=>{ if(!drag) return; drag=false; tr.classList.remove("dragging"); const dx=e.clientX-sx;
+      go(dx<-40 ? si+1 : dx>40 ? si-1 : si); };
+    tr.addEventListener("pointerup",end); tr.addEventListener("pointercancel",end);
     const start=+g.dataset.start||0; if(start) requestAnimationFrame(()=>{ tr.scrollLeft = start*tr.clientWidth; upd(); });
     upd();
   });
@@ -970,12 +1006,16 @@ function fillFilters(){
   $("#f-sig").innerHTML = `<option value="">Pest / Beneficial / Variable</option>` + Object.entries(SIG).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
 }
 const ordChip = (o,lg) => `<span class="ord${lg?" lg":""}" style="--h:${ORD[o].h}${o==="NI"?";--s:0%":""}">${ORD[o].n}</span>`;
+const metaChip = (s,lg) => `<span class="chip m-${s.mk}${lg?" lg":""}">${s.meta}</span>`;
+const mouthChip = (s,lg) => `<span class="chip mouth${lg?" lg":""}">${s.mouth}</span>`;
+const sigChip = (s,lg) => `<span class="sig sig-${s.sk}${lg?" lg":""}">${s.sig}</span>`;
+const charChips = (s,lg) => ordChip(s.o,lg) + metaChip(s,lg) + mouthChip(s,lg) + sigChip(s,lg);
 function rowHTML(s, sub){
   return `<li><button class="row has-thumb" data-id="${s.id}">${thumbHTML(s)}
     <span class="row-main"><span class="row-name">${esc(s.name)}${stageTag(s)}${isNew(s)?`<span class="tag new">new</span>`:""}</span>
-      <span class="row-chips">${ordChip(s.o)}${sigPill(s)}</span>
-      <span class="row-sub">${sub || s.meta+" · "+s.mouth}</span></span>
-    <span class="row-end"><span class="row-id">#${s.id}</span></span></button></li>`;
+      ${sub?`<span class="row-sub">${sub}</span>`:""}</span>
+    <span class="row-end"><span class="row-id">#${s.id}</span></span>
+    <span class="row-chips sm">${charChips(s)}</span></button></li>`;
 }
 let insTab = "all";
 function renderList(){
@@ -1023,7 +1063,7 @@ function openSpec(id){
   const sibs = SPECS.filter(x=>x.o===s.o).length;
   openSheet(`
     <div class="sheet-head"><div style="min-width:0;display:flex;flex-direction:column;gap:8px"><h3 id="sheet-title">${esc(s.name)}${isNew(s)?` <span class="tag new" style="vertical-align:middle">new</span>`:""}</h3>
-      <div class="row-chips">${ordChip(s.o,true)}${sigPill(s)}</div>
+      <div class="row-chips">${charChips(s,true)}</div>
       <div class="sub" style="margin:0"><span class="mono">ID #${s.id}</span>${s.imm?` · official name “${esc(s.raw)}” (${s.stage})`:""}${RENAMED[s.id]?` · formerly “${esc(RENAMED[s.id])}”`:""}</div></div>
       <button class="close" aria-label="Close">×</button></div>
     ${galleryHTML(id)}
@@ -1034,9 +1074,9 @@ function openSpec(id){
         <tbody>
           <tr><td>Common name</td><td><b>${esc(s.raw)}</b>${s.imm?`<div class="hint">** = ${s.stage}</div>`:""}</td><td class="num">3</td></tr>
           <tr><td>Order</td><td>${ordChip(s.o)}</td><td class="num">2</td></tr>
-          <tr><td>Metamorphosis</td><td><b>${s.meta}</b></td><td class="num">1</td></tr>
-          <tr><td>Mouthparts</td><td><b>${s.mouth}</b></td><td class="num">1</td></tr>
-          <tr><td>Significance</td><td><b>${s.sig}</b></td><td class="num">1</td></tr>
+          <tr><td>Metamorphosis</td><td>${metaChip(s)}</td><td class="num">1</td></tr>
+          <tr><td>Mouthparts</td><td>${mouthChip(s)}</td><td class="num">1</td></tr>
+          <tr><td>Significance</td><td>${sigChip(s)}</td><td class="num">1</td></tr>
           <tr class="total"><td>Total per specimen</td><td></td><td class="num">8</td></tr>
         </tbody></table></div>
     </div>
