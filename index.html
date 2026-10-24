@@ -17,7 +17,7 @@
   --bg:#ECEFE9; --surface:#FBFCF9; --sunk:#E2E7DF; --ink:#18221C; --muted:#56635A; --line:#CFD7CC;
   --accent:#95560F; --accent-ink:#FFFFFF; --accent-soft:#F3E3CC;
   --good:#2D7A44; --good-soft:#DCEFE1; --bad:#B0352D; --bad-soft:#F6DEDB; --var:#46668A; --var-soft:#DDE6F0;
-  --chipL:86%; --chipLine:42%; --photo-bg:#1D211E;
+  --chipL:86%; --chipLine:42%; --chipText:24%; --photo-bg:#1D211E;
   --font-display:"Zilla Slab","Roboto Slab",Rockwell,Georgia,serif;
   --font-body:"Source Sans 3",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
@@ -27,12 +27,12 @@
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; color-scheme:dark } }
+  --chipL:26%; --chipLine:62%; --chipText:84%; color-scheme:dark } }
 :root[data-theme="dark"]{
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; color-scheme:dark }
+  --chipL:26%; --chipLine:62%; --chipText:84%; color-scheme:dark }
 
 *{box-sizing:border-box}
 html,body{background:var(--bg)}
@@ -99,9 +99,19 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:
 .row-end{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 .row-id{font-family:var(--font-mono);font-size:12.5px;color:var(--muted)}
 
-.bubble{--h:0;width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;font-family:var(--font-mono);font-size:13px;font-weight:600;background:hsl(var(--h) 42% var(--chipL));border:1.5px solid hsl(var(--h) 45% var(--chipLine));color:var(--ink);flex:0 0 auto}
+.bubble{--h:0;width:34px;height:34px;border-radius:50%;display:inline-grid;place-items:center;font-family:var(--font-mono);font-size:13px;font-weight:600;background:hsl(var(--h) var(--s,42%) var(--chipL));border:1.5px solid hsl(var(--h) var(--s,45%) var(--chipLine));color:var(--ink);flex:0 0 auto}
 .bubble.lg{width:46px;height:46px;font-size:16px}
 .tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);border:1px solid currentColor;border-radius:4px;padding:0 5px;line-height:1.5}
+.tag.new{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ord{--h:0;display:inline-flex;align-items:center;font-weight:700;font-size:13px;line-height:1.3;padding:2px 8px;border-radius:5px;background:hsl(var(--h) var(--s,48%) var(--chipL));color:hsl(var(--h) var(--s,65%) var(--chipText));border:1px solid hsl(var(--h) var(--s,45%) var(--chipLine));white-space:nowrap}
+.ord.lg{font-size:16px;padding:4px 11px;border-radius:6px}
+.row-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:3px 0 1px}
+.ins-new-head{display:flex;flex-direction:column;gap:6px}
+.ins-new-head p{margin:0;color:var(--muted)}
+.renamed{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.renamed li+li{border-top:1px solid var(--line)}
+.renamed .was{font-size:13px;color:var(--muted)}
+.renamed .was s{color:var(--muted)}
 .sig{font-size:12px;font-weight:700;border-radius:999px;padding:2px 9px;white-space:nowrap}
 .sig-P{background:var(--bad-soft);color:var(--bad)}
 .sig-B{background:var(--good-soft);color:var(--good)}
@@ -246,6 +256,11 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
   <!-- INSECTS -->
   <section class="view" id="v-insects">
     <div class="view-head"><h2>Specimen list</h2><p>Every specimen on the official 2027–2031 ID list. Tap one for its card.</p></div>
+    <div class="seg c2" id="ins-tabs" role="group" aria-label="Which specimens"><button type="button" data-v="all" aria-pressed="true">All 166</button><button type="button" data-v="new" aria-pressed="false">New for 2027–2031</button></div>
+    <div class="ins-new-head" id="ins-new-head" hidden>
+      <p>These 11 specimens were added to the official list for 2027–2031. They weren’t on the 2022–2026 list, so older study cards and collections won’t have them.</p>
+    </div>
+    <div id="ins-all-ctrl" class="view" style="gap:16px">
     <input id="q" class="search" type="search" placeholder="Search name, order or ID number" autocomplete="off" aria-label="Search specimens">
     <div class="filters" role="group" aria-label="Filters">
       <select id="f-order" class="sel" aria-label="Order"></select>
@@ -255,7 +270,13 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
       <select id="f-sort" class="sel" aria-label="Sort"><option value="name">Sort: A–Z</option><option value="id">Sort: ID #</option><option value="order">Sort: order</option><option value="miss">Sort: most missed</option></select>
     </div>
     <div class="count"><span id="count"></span><button class="linkbtn" id="clear" hidden>Clear filters</button></div>
+    </div>
     <ul class="list" id="list"></ul>
+    <div id="ins-renamed" hidden>
+      <div class="kicker" style="margin:4px 0 8px">Renamed on the new list</div>
+      <p class="hint" style="margin:0 0 10px">Same insect as on the 2022–2026 list under a new official name; a few are only spelling changes. Use the new name at contest.</p>
+      <ul class="renamed" id="renamed-list"></ul>
+    </div>
   </section>
 
   <!-- DRILL -->
@@ -520,6 +541,12 @@ const SPECS = SPEC_RAW.trim().split("\n").map(line=>{
 });
 const BY_ID = Object.fromEntries(SPECS.map(s=>[s.id,s]));
 const label = s => s.name + (s.imm ? " ("+s.stage+")" : "");
+
+/* Compared with the 2022–2026 Texas FFA ID list (155 specimens) */
+const NEW_IDS = [100,102,115,130,133,181,186,194,234,260,265];
+const RENAMED = {162:"short-horned grasshopper",180:"long-horned grasshopper",192:"praying mantis",107:"beet armyworm**",
+  124:"cattle grub**",172:"tobacco hornworm**",238:"stonefly larva**",164:"green lace wing",222:"scorpion fly",247:"thrips"};
+const isNew = s => NEW_IDS.includes(s.id);
 
 /* answer index | question | options... (Texas FFA 2027–2031 bank, numbered as in the official key) */
 const BANK_RAW = `3|To which body segment are the elytra attached?|prothorax|first abdominal|metathorax|mesothorax
@@ -886,7 +913,7 @@ function saveP(){ try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){}
 const $ = (s,el=document)=>el.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
-const bubble = (o,lg) => `<span class="bubble${lg?" lg":""}" style="--h:${ORD[o].h}" title="${esc(ORD[o].n)}">${ORD[o].c}</span>`;
+const bubble = (o,lg) => `<span class="bubble${lg?" lg":""}" style="--h:${ORD[o].h}${o==="NI"?";--s:0%":""}" title="${esc(ORD[o].n)}">${ORD[o].c}</span>`;
 const sigPill = s => `<span class="sig sig-${s.sk}">${s.sig}</span>`;
 const stageTag = s => s.imm ? `<span class="tag">${s.stage}</span>` : "";
 function specMiss(id){ const r=P.s[id]; if(!r) return 0; return Object.values(r.m||{}).reduce((a,b)=>a+b,0); }
@@ -894,9 +921,9 @@ function specMiss(id){ const r=P.s[id]; if(!r) return 0; return Object.values(r.
 /* photo helpers */
 const thumbRows = Math.ceil(SPECS.length / THUMB_COLS);
 function thumbHTML(s){
-  if(!PHOTOS[s.id]) return `<span class="thumb">${bubble(s.o)}</span>`;
+  if(!PHOTOS[s.id]) return `<span class="thumb"></span>`;
   const k = s.id - 100, col = k % THUMB_COLS, row = Math.floor(k / THUMB_COLS);
-  return `<span class="thumb" style="background-image:url(photos/thumbs.webp);background-size:${THUMB_COLS*60}px ${thumbRows*45}px;background-position:-${col*60}px -${row*45}px">${bubble(s.o)}</span>`;
+  return `<span class="thumb" style="background-image:url(photos/thumbs.webp);background-size:${THUMB_COLS*60}px ${thumbRows*45}px;background-position:-${col*60}px -${row*45}px"></span>`;
 }
 function galleryHTML(id, opts={}){
   const ph = PHOTOS[id];
@@ -942,7 +969,23 @@ function fillFilters(){
   $("#f-mouth").innerHTML = `<option value="">Any mouthparts</option>` + Object.entries(MOUTH).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
   $("#f-sig").innerHTML = `<option value="">Pest / Beneficial / Variable</option>` + Object.entries(SIG).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
 }
+const ordChip = (o,lg) => `<span class="ord${lg?" lg":""}" style="--h:${ORD[o].h}${o==="NI"?";--s:0%":""}">${ORD[o].n}</span>`;
+function rowHTML(s, sub){
+  return `<li><button class="row has-thumb" data-id="${s.id}">${thumbHTML(s)}
+    <span class="row-main"><span class="row-name">${esc(s.name)}${stageTag(s)}${isNew(s)?`<span class="tag new">new</span>`:""}</span>
+      <span class="row-chips">${ordChip(s.o)}${sigPill(s)}</span>
+      <span class="row-sub">${sub || s.meta+" · "+s.mouth}</span></span>
+    <span class="row-end"><span class="row-id">#${s.id}</span></span></button></li>`;
+}
+let insTab = "all";
 function renderList(){
+  const newTab = insTab==="new";
+  $("#ins-all-ctrl").hidden = newTab; $("#ins-new-head").hidden = !newTab; $("#ins-renamed").hidden = !newTab;
+  if(newTab){
+    $("#list").innerHTML = SPECS.filter(isNew).sort((a,b)=>a.name.localeCompare(b.name)).map(s=>rowHTML(s)).join("");
+    $("#renamed-list").innerHTML = Object.entries(RENAMED).map(([id,old])=>{ const s=BY_ID[id]; return rowHTML(s, `<span class="was">was <s>${esc(old)}</s></span>`).replace(/^<li>/,"<li>"); }).join("");
+    return;
+  }
   const q = $("#q").value.trim().toLowerCase();
   const fo=$("#f-order").value, fm=$("#f-meta").value, fmo=$("#f-mouth").value, fs=$("#f-sig").value, sort=$("#f-sort").value;
   ["#f-order","#f-meta","#f-mouth","#f-sig"].forEach(id=>$(id).classList.toggle("on", !!$(id).value));
@@ -957,11 +1000,11 @@ function renderList(){
   if(sort==="miss") rows.sort((a,b)=>specMiss(b.id)-specMiss(a.id)||a.name.localeCompare(b.name));
   $("#count").textContent = rows.length===SPECS.length ? `${rows.length} specimens` : `${rows.length} of ${SPECS.length} specimens`;
   $("#clear").hidden = !(q||fo||fm||fmo||fs);
-  $("#list").innerHTML = rows.length ? rows.map(s=>`<li><button class="row has-thumb" data-id="${s.id}">${thumbHTML(s)}
-    <span class="row-main"><span class="row-name">${esc(s.name)}${stageTag(s)}</span><span class="row-sub">${s.order} · ${s.meta} · ${s.mouth}</span></span>
-    <span class="row-end"><span class="row-id">#${s.id}</span>${sigPill(s)}</span></button></li>`).join("")
+  $("#list").innerHTML = rows.length ? rows.map(s=>rowHTML(s)).join("")
     : `<li class="empty">No specimens match. Try clearing a filter.</li>`;
 }
+bindSeg($("#ins-tabs"), v=>{ insTab=v; renderList(); });
+$("#renamed-list").addEventListener("click",e=>{ const b=e.target.closest(".row"); if(b) openSpec(+b.dataset.id); });
 ["#q","#f-order","#f-meta","#f-mouth","#f-sig","#f-sort"].forEach(id=>$(id).addEventListener("input",renderList));
 $("#clear").addEventListener("click",()=>{ $("#q").value=""; ["#f-order","#f-meta","#f-mouth","#f-sig"].forEach(id=>$(id).value=""); renderList(); });
 $("#list").addEventListener("click",e=>{ const b=e.target.closest(".row"); if(b) openSpec(+b.dataset.id); });
@@ -979,8 +1022,9 @@ function openSpec(id){
   const missTxt = r && r.n ? `<p class="hint">Your drills: seen ${r.n}×, ${specMiss(id)} field${specMiss(id)===1?"":"s"} missed.</p>` : "";
   const sibs = SPECS.filter(x=>x.o===s.o).length;
   openSheet(`
-    <div class="sheet-head">${bubble(s.o,true)}<div style="min-width:0"><h3 id="sheet-title">${esc(s.name)}</h3>
-      <div class="sub"><span class="mono">ID #${s.id}</span>${s.imm?` · official name “${esc(s.raw)}” (${s.stage})`:""}</div></div>
+    <div class="sheet-head"><div style="min-width:0;display:flex;flex-direction:column;gap:8px"><h3 id="sheet-title">${esc(s.name)}${isNew(s)?` <span class="tag new" style="vertical-align:middle">new</span>`:""}</h3>
+      <div class="row-chips">${ordChip(s.o,true)}${sigPill(s)}</div>
+      <div class="sub" style="margin:0"><span class="mono">ID #${s.id}</span>${s.imm?` · official name “${esc(s.raw)}” (${s.stage})`:""}${RENAMED[s.id]?` · formerly “${esc(RENAMED[s.id])}”`:""}</div></div>
       <button class="close" aria-label="Close">×</button></div>
     ${galleryHTML(id)}
     <div>
@@ -989,7 +1033,7 @@ function openSpec(id){
         <thead><tr><th>Scored on</th><th>Answer</th><th class="num">Pts</th></tr></thead>
         <tbody>
           <tr><td>Common name</td><td><b>${esc(s.raw)}</b>${s.imm?`<div class="hint">** = ${s.stage}</div>`:""}</td><td class="num">3</td></tr>
-          <tr><td>Order</td><td><b>${O.n}</b></td><td class="num">2</td></tr>
+          <tr><td>Order</td><td>${ordChip(s.o)}</td><td class="num">2</td></tr>
           <tr><td>Metamorphosis</td><td><b>${s.meta}</b></td><td class="num">1</td></tr>
           <tr><td>Mouthparts</td><td><b>${s.mouth}</b></td><td class="num">1</td></tr>
           <tr><td>Significance</td><td><b>${s.sig}</b></td><td class="num">1</td></tr>
@@ -1011,7 +1055,8 @@ function openSpec(id){
   $("#sheet [data-order]").addEventListener("click",()=>{ closeSheet(); filterOrder(s.o); });
   bindGalleries($("#sheet"));
 }
-function filterOrder(o){ show("insects"); $("#q").value=""; ["#f-meta","#f-mouth","#f-sig"].forEach(id=>$(id).value=""); $("#f-order").value=o; $("#f-sort").value="name"; renderList(); }
+function showNewTab(){ show("insects"); insTab="new"; setSeg($("#ins-tabs"),"new"); renderList(); }
+function filterOrder(o){ show("insects"); insTab="all"; setSeg($("#ins-tabs"),"all"); $("#q").value=""; ["#f-meta","#f-mouth","#f-sig"].forEach(id=>$(id).value=""); $("#f-order").value=o; $("#f-sort").value="name"; renderList(); }
 
 /* ===================== DRILL ===================== */
 const D = {active:false, mode:"full", n:25, timer:true, focus:false};
@@ -1344,13 +1389,12 @@ function renderGuide(){
 
     <div class="panel"><h3>What changed from 2022–2026</h3>
       <ul class="changes">
-        <li>The ID list grew from 150 to <b>166</b> specimens with new ID numbers (100–265) and new order codes (10–31).</li>
-        <li>A fourth metamorphosis type, <b>Paurometabolous</b>, now covers true bugs, roaches, termites, grasshoppers, earwigs, mantids, walkingsticks, lice and thrips. Only dragonflies, damselflies, mayflies and stoneflies stay Hemimetabolous.</li>
-        <li>Termites moved from Isoptera to <b>Blattodea</b>.</li>
-        <li>Lice and booklice are now <b>Psocodea</b> (was Phthiraptera and Psocoptera).</li>
+        <li>The ID list grew from 155 to <b>166</b> specimens, with new ID numbers (100–265) and new order codes (10–31). <button class="linkbtn" id="g-new" style="font-size:inherit">See the 11 new ones</button></li>
+        <li>Seven specimens were renamed, e.g. short-horned grasshopper is now <b>grasshopper</b>, long-horned grasshopper is <b>katydid</b>, cattle grub is <b>bot fly larva</b>.</li>
+        <li>The rules now describe four metamorphosis types. <b>Paurometabolous</b> covers true bugs, roaches, termites, grasshoppers, earwigs, mantids, walkingsticks, lice and thrips. Only dragonflies, damselflies, mayflies and stoneflies are Hemimetabolous.</li>
+        <li>Lice and booklice are now one order, <b>Psocodea</b> (was Phthiraptera and Psocoptera).</li>
         <li>Silverfish are now <b>Zygentoma</b> (was Thysanura). Some exam questions still say Thysanura.</li>
-        <li>Dobsonfly and hellgrammite moved from Neuroptera to <b>Megaloptera</b>.</li>
-        <li>The exam went from 25 to <b>30</b> questions, drawn from a 350-question bank.</li>
+        <li>The exam bank grew to <b>350</b> questions. The exam is 30 questions from it.</li>
       </ul></div>
 
     <div class="panel"><h3>Metamorphosis</h3>
@@ -1383,6 +1427,7 @@ function renderGuide(){
       <p class="hint">Scores and misses are stored in this browser only. Clearing site data or switching phones starts fresh.</p>
       <div id="reset-area"><button class="btn ghost wide" id="reset">Reset my progress</button></div></div>`;
   $("#v-guide").querySelectorAll("[data-o]").forEach(b=>b.addEventListener("click",()=>filterOrder(b.dataset.o)));
+  $("#g-new").addEventListener("click", showNewTab);
   $("#reset").addEventListener("click",()=>{
     $("#reset-area").innerHTML = `<div class="confirm"><span>Erase all drill and exam history on this phone?</span><div class="row-btns"><button class="btn ghost" id="r-no">Cancel</button><button class="btn" id="r-yes">Erase</button></div></div>`;
     $("#r-no").addEventListener("click",renderGuide);
