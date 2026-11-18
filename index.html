@@ -17,7 +17,7 @@
   --bg:#ECEFE9; --surface:#FBFCF9; --sunk:#E2E7DF; --ink:#18221C; --muted:#56635A; --line:#CFD7CC;
   --accent:#95560F; --accent-ink:#FFFFFF; --accent-soft:#F3E3CC;
   --good:#2D7A44; --good-soft:#DCEFE1; --bad:#B0352D; --bad-soft:#F6DEDB; --var:#46668A; --var-soft:#DDE6F0;
-  --chipL:86%; --chipLine:42%; --chipText:24%; --photo-bg:#1D211E;
+  --chipL:86%; --chipLine:42%; --chipText:24%; --photo-bg:#1D211E; --catL:38%; --cat-ink:#FFFFFF;
   --mA-bg:#E4E7EA; --mA-fg:#46505A; --mP-bg:#F6E6C6; --mP-fg:#7A4C08; --mH-bg:#D2ECE8; --mH-fg:#17655C; --mO-bg:#ECE0F3; --mO-fg:#67387F;
   --font-display:"Zilla Slab","Roboto Slab",Rockwell,Georgia,serif;
   --font-body:"Source Sans 3",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -28,13 +28,13 @@
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; --chipText:84%;
+  --chipL:26%; --chipLine:62%; --chipText:84%; --catL:66%; --cat-ink:#0C110E;
   --mA-bg:#252B30; --mA-fg:#B7C0C9; --mP-bg:#382A12; --mP-fg:#EBBA68; --mH-bg:#11302C; --mH-fg:#78D2C6; --mO-bg:#2D2136; --mO-fg:#CDA6E6; color-scheme:dark } }
 :root[data-theme="dark"]{
   --bg:#111713; --surface:#19211C; --sunk:#0C110E; --ink:#E5ECE6; --muted:#9AA79E; --line:#2B3630;
   --accent:#E2A452; --accent-ink:#1A1206; --accent-soft:#3A2C17;
   --good:#63C483; --good-soft:#18301F; --bad:#EE7B70; --bad-soft:#3A1C19; --var:#8FB2D8; --var-soft:#1C2734;
-  --chipL:26%; --chipLine:62%; --chipText:84%;
+  --chipL:26%; --chipLine:62%; --chipText:84%; --catL:66%; --cat-ink:#0C110E;
   --mA-bg:#252B30; --mA-fg:#B7C0C9; --mP-bg:#382A12; --mP-fg:#EBBA68; --mH-bg:#11302C; --mH-fg:#78D2C6; --mO-bg:#2D2136; --mO-fg:#CDA6E6; color-scheme:dark }
 
 *{box-sizing:border-box}
@@ -62,7 +62,7 @@ h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:
 
 /* bottom nav */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
-.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);height:var(--navh)}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);height:var(--navh)}
 .tab{background:none;border:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px;font-weight:600;color:var(--muted)}
 .tab svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab[aria-current="page"]{color:var(--accent)}
@@ -262,6 +262,46 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
 .clue.photo{border-style:solid;border-color:var(--line);padding:12px}
 .hintbtn{align-self:flex-start}
 
+/* Bug Pop game */
+.g-hud{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.g-hud>div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.g-hud .k{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.g-hud b{font-family:var(--font-mono);font-size:17px;font-variant-numeric:tabular-nums}
+.g-goal{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.g-goal .bar i{background:var(--good)}
+.g-rule{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px}
+.g-rule>span:first-child{margin-right:2px}
+.g-chip{display:inline-flex;align-items:center;font-weight:700;font-size:12.5px;line-height:1.3;padding:1px 7px;border-radius:5px;color:var(--cc);border:1.5px solid var(--cc);background:var(--surface);white-space:nowrap}
+.g-msg{min-height:2.7em;margin:-6px 0;font-size:14px;line-height:1.35;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;padding:0 2px}
+.g-msg.bad{color:var(--bad)}
+.g-msg.bad b{color:var(--ink)}
+.g-combo{font-family:var(--font-mono);font-size:12px;background:var(--accent);color:var(--accent-ink);border-radius:4px;padding:0 5px}
+.g-wrap{position:relative;display:flex;justify-content:center}
+.g-board{position:relative;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;background:var(--sunk);border-radius:12px}
+.gb{position:absolute;left:0;top:0;width:var(--cw);height:var(--ch);padding:3px;display:flex;flex-direction:column;align-items:center;gap:1px;transition:transform .2s ease,opacity .17s ease;cursor:pointer}
+.gb-c{position:relative;width:calc(var(--cw) - 6px);aspect-ratio:1;flex:0 0 auto}
+.gb-ph{position:absolute;inset:0;border-radius:50%;background-color:var(--photo-bg);background-repeat:no-repeat;border:2px solid var(--surface);box-shadow:0 1px 3px rgba(0,0,0,.25);transition:border-color .15s,transform .15s}
+.gb-tint{position:absolute;inset:0;border-radius:50%;background:var(--cc);opacity:0;transition:opacity .15s;pointer-events:none}
+.gb-cat{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.6);white-space:nowrap;background:var(--cc);color:var(--cat-ink);font-weight:700;font-size:10px;line-height:1.2;padding:2px 5px;border-radius:5px;text-align:center;opacity:0;transition:opacity .15s,transform .15s;pointer-events:none;z-index:3;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.gb-name{display:none;width:100%;font-size:9px;line-height:1.1;text-align:center;color:var(--ink);font-weight:600;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;visibility:hidden;max-height:3.35em;hyphens:auto;-webkit-hyphens:auto}
+.g-board.names .gb-name{visibility:visible}
+.g-board:not(.names) .gb-name{display:none}
+.gb.sel .gb-ph{border-color:var(--accent);border-width:3px;transform:scale(1.07)}
+.gb.reveal .gb-ph{border-color:var(--cc);border-width:3px}
+.gb.reveal .gb-tint{opacity:.32}
+.gb.reveal{z-index:2}
+.gb.reveal.lbl .gb-cat{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.gb.pop{opacity:0}
+.gb.pop .gb-c{transform:scale(1.25);transition:transform .17s ease}
+.g-over{position:absolute;inset:0;display:grid;place-items:center;background:rgba(10,14,12,.45);border-radius:12px;padding:16px}
+.g-over-card{background:var(--surface);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;align-items:stretch;text-align:center;width:min(320px,100%);box-shadow:0 6px 24px rgba(0,0,0,.3)}
+.g-log{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+.g-log-row{display:flex;gap:8px;align-items:baseline}
+.g-zoom{position:fixed;left:50%;top:42%;transform:translate(-50%,-50%);z-index:30;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:10px}
+.gz-ph{width:min(260px,70vw);aspect-ratio:1;border-radius:50%;background-repeat:no-repeat;background-color:var(--photo-bg);border:4px solid var(--surface);box-shadow:0 8px 30px rgba(0,0,0,.45)}
+.gz-name{background:var(--surface);color:var(--ink);font-weight:700;padding:4px 12px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:reduce){ .gb{transition:none} }
+
 @media (min-width:600px){ .seg.c4m{grid-template-columns:repeat(4,1fr)} }
 @media (prefers-reduced-motion:no-preference){ .bar i{transition:width .3s ease} .flash{transition:transform .15s ease} .flash:active{transform:scale(.99)} }
 </style>
@@ -307,6 +347,9 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
   <section class="view" id="v-exam" hidden></section>
 
   <!-- GUIDE -->
+  <section class="view" id="v-game" hidden></section>
+
+  <!-- GUIDE -->
   <section class="view" id="v-guide" hidden></section>
 
   <p class="foot">Study tool built from the Texas FFA 2027–2031 Entomology rules, ID list, characteristic list and exam bank. Not an official FFA product. Progress is saved on this phone only.</p>
@@ -316,6 +359,7 @@ table.grade tr.total td{font-weight:700;color:var(--ink);background:var(--bg)}
   <button class="tab" data-view="insects" aria-current="page"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="14" rx="4.5" ry="6"/><circle cx="12" cy="6" r="2.2"/><path d="M7.5 11H4M7.5 15H3.5M8 18.5l-3 2M16.5 11H20M16.5 15h4M16 18.5l3 2M11 4l-2-2.5M13 4l2-2.5M12 8v12"/></svg>Insects</button>
   <button class="tab" data-view="drill"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg>ID Drill</button>
   <button class="tab" data-view="exam"><svg viewBox="0 0 24 24"><rect x="4.5" y="3" width="15" height="18" rx="2"/><path d="M8 8h1M8 12h1M8 16h1M11.5 8h4.5M11.5 12h4.5M11.5 16h4.5"/></svg>Exam</button>
+  <button class="tab" data-view="game"><svg viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.5"/><circle cx="16.5" cy="15.5" r="3.5"/><circle cx="13" cy="7" r="3.5"/></svg>Game</button>
   <button class="tab" data-view="guide"><svg viewBox="0 0 24 24"><path d="M4 5.5A2 2 0 0 1 6 3.5h5v16H6a2 2 0 0 0-2 2zM20 5.5a2 2 0 0 0-2-2h-5v16h5a2 2 0 0 1 2 2z"/></svg>Guide</button>
 </div></nav>
 
@@ -370,7 +414,9 @@ const ORD = {
   NI:{n:"Non-insects",c:31,common:"spiders, ticks, mites, scorpions, centipedes, millipedes, pillbugs",m:"A",key:"Not insects. Arachnids have 8 legs and 2 body regions; centipedes have 1 pair of legs per segment, millipedes 2; pillbugs are crustaceans with 7 pairs."}
 };
 const ORD_KEYS = Object.keys(ORD);
-ORD_KEYS.forEach((k,i)=>{ ORD[k].h = Math.round((i*360/ORD_KEYS.length + 95) % 360); });
+const ORD_HUE = {Co:130,He:205,Le:280,Di:25,Hy:52,Or:170,Bl:0,Ne:95,Od:320,Ps:240,NI:0};
+ORD_KEYS.filter(k=>!(k in ORD_HUE)).forEach((k,i)=>{ ORD_HUE[k] = Math.round((i*360/11 + 12) % 360); });
+ORD_KEYS.forEach(k=>{ ORD[k].h = ORD_HUE[k]; });
 
 /* id|official name|order|mouth|significance|study notes */
 const SPEC_RAW = `100|ambush bug|He|PS|B|Small, stout, knobby yellow-and-brown bug with thick grasping front legs; hides in flowers to ambush pollinators.
@@ -983,7 +1029,7 @@ function bindGalleries(root){
 }
 
 /* ===================== NAV ===================== */
-const VIEWS = ["insects","drill","exam","guide"];
+const VIEWS = ["insects","drill","exam","game","guide"];
 let current = "insects";
 function show(v){
   if(!VIEWS.includes(v)) v="insects";
@@ -992,6 +1038,7 @@ function show(v){
   document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-current", t.dataset.view===v ? "page" : "false"));
   if(v==="drill" && !D.active) renderDrillSetup();
   if(v==="exam" && !E.active) renderExamSetup();
+  if(v==="game" && !G.active) renderGameSetup();
   if(v==="guide") renderGuide();
   window.scrollTo(0,0);
 }
@@ -1474,6 +1521,349 @@ function renderGuide(){
     $("#r-yes").addEventListener("click",()=>{ P={q:{},s:{},runs:[]}; saveP(); renderGuide(); renderList(); });
   });
 }
+
+/* ===================== GAME LOGIC (pure) ===================== */
+const GCOLS = 6, GROWS = 7;
+/* runs of 3+ equal values in a grid g[r][c] (null = empty) */
+function gFindRuns(g){
+  const runs = [];
+  for(let r=0;r<GROWS;r++){ let c=0; while(c<GCOLS){ const v=g[r][c]; let e=c+1; while(e<GCOLS && v!=null && g[r][e]===v) e++;
+    if(v!=null && e-c>=3){ const cells=[]; for(let x=c;x<e;x++) cells.push([r,x]); runs.push({v,cells}); } c=e; } }
+  for(let c=0;c<GCOLS;c++){ let r=0; while(r<GROWS){ const v=g[r][c]; let e=r+1; while(e<GROWS && v!=null && g[e][c]===v) e++;
+    if(v!=null && e-r>=3){ const cells=[]; for(let y=r;y<e;y++) cells.push([y,c]); runs.push({v,cells}); } r=e; } }
+  return runs;
+}
+function gSwapCells(g,a,b){ const t=g[a[0]][a[1]]; g[a[0]][a[1]]=g[b[0]][b[1]]; g[b[0]][b[1]]=t; }
+/* all swaps that make a match */
+function gMoves(g){
+  const out=[];
+  for(let r=0;r<GROWS;r++) for(let c=0;c<GCOLS;c++) for(const [dr,dc] of [[0,1],[1,0]]){
+    const r2=r+dr, c2=c+dc; if(r2>=GROWS||c2>=GCOLS||g[r][c]===g[r2][c2]) continue;
+    gSwapCells(g,[r,c],[r2,c2]); if(gFindRuns(g).length) out.push([[r,c],[r2,c2]]); gSwapCells(g,[r,c],[r2,c2]);
+  }
+  return out;
+}
+/* fresh grid of values with no starting matches */
+function gFill(values, rnd){
+  const g=[];
+  for(let r=0;r<GROWS;r++){ g.push([]); for(let c=0;c<GCOLS;c++){
+    let opts=values.filter(v=>!(c>=2 && g[r][c-1]===v && g[r][c-2]===v) && !(r>=2 && g[r-1][c]===v && g[r-2][c]===v));
+    g[r].push(opts[Math.floor(rnd()*opts.length)]); } }
+  return g;
+}
+/* points for one run, with cascade combo multiplier */
+function gRunPts(n, combo){ return Math.round((n*10 + (n>=4 ? (n-3)*20 : 0)) * Math.min(3, 1 + 0.5*(combo-1))); }
+/* value for a new bug dropping into (r,c) that doesn't complete a line with bugs already there */
+function gSafeValue(g, r, c, values, rnd){
+  const at=(y,x)=> (y>=0&&y<GROWS&&x>=0&&x<GCOLS) ? g[y][x] : null;
+  const bad=v=> (at(r+1,c)===v&&at(r+2,c)===v) || (at(r-1,c)===v&&at(r+1,c)===v) || (at(r-1,c)===v&&at(r-2,c)===v)
+    || (at(r,c-1)===v&&at(r,c-2)===v) || (at(r,c+1)===v&&at(r,c+2)===v) || (at(r,c-1)===v&&at(r,c+1)===v);
+  const ok=values.filter(v=>!bad(v)); const pool=ok.length?ok:values;
+  return pool[Math.floor(rnd()*pool.length)];
+}
+
+/* ===================== GAME: Bug Pop (match-3) ===================== */
+const GRULES = {
+  sig:   {label:"Significance",  get:s=>s.sk, name:v=>SIG[v]},
+  meta:  {label:"Metamorphosis", get:s=>s.mk, name:v=>META[v]},
+  mouth: {label:"Mouthparts",    get:s=>s.mc, name:v=>MOUTH[v]},
+  order: {label:"Order",         get:s=>s.o,  name:v=>ORD[v].n}
+};
+const G_ORDER_OK = ORD_KEYS.filter(k=>SPECS.filter(s=>s.o===k).length>=3);
+const G_MOVES = 15, G_BASE_T = {3:800, 4:500, 5:420, 6:360};
+const MOUTH_HUE = {C:24, PS:205, SI:290, SP:140, CL:48, NA:0, KS:340, KL:170, V:250, RS:95};
+function gLevelValues(rule, L){
+  if(rule==="sig") return ["P","B","V"];
+  if(rule==="meta") return L<=2 ? ["O","P","A"] : ["O","P","A","H"];
+  if(rule==="mouth") return [["C","PS","SI"],["C","PS","SI","NA"],["C","PS","SI","NA","SP"],["C","PS","SI","NA","SP","CL"]][Math.min(L-1,3)];
+  const fixed = [["Co","Le","Hy","NI"],["He","Di","Or","Od"],["Co","He","Bl","Ne","Ps"],["Di","Hy","Le","Od","Or"]];
+  return L<=fixed.length ? fixed[L-1] : shuffle(G_ORDER_OK).slice(0, L<=6 ? 5 : 6);
+}
+function gTarget(k, L){ return Math.round(G_BASE_T[k] * (1 + 0.15*(L-1)) / 50) * 50; }
+function gColor(rule, v){
+  if(rule==="sig") return {P:"var(--bad)",B:"var(--good)",V:"var(--var)"}[v];
+  if(rule==="meta") return `var(--m${v}-fg)`;
+  if(rule==="order") return `hsl(${ORD[v].h} ${v==="NI"?0:60}% var(--catL))`;
+  return `hsl(${MOUTH_HUE[v]} ${v==="NA"?0:60}% var(--catL))`;
+}
+const gTiles = id => Math.min(3, PHOTOS[id] ? PHOTOS[id].c.length : 1);
+function gPhotoStyle(id, f){ const n=gTiles(id); return `background-image:url(game/${id}.webp);background-size:${n*100}% 100%;background-position:${n>1?f/(n-1)*100:0}% 0`; }
+
+const G = {active:false, rule:"order", mode:"beginner"};
+const gKey = () => G.rule+"-"+G.mode;
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const gReduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function renderGameSetup(){
+  G.active=false;
+  const best = P.best || {};
+  const cell = k => best[k] ? `<b>${best[k].score.toLocaleString()}</b><div class="hint">level ${best[k].level}</div>` : `<span class="hint">–</span>`;
+  $("#v-game").innerHTML = `
+    <div class="view-head"><h2>Bug Pop</h2><p>Swap two neighboring bugs to line up 3 or more that share the same category. Matches pop and show their category color.</p></div>
+    <div class="panel">
+      <div><span class="opt-label">Match by</span>${segHTML("g-rule",[["sig","Significance"],["meta","Metamorphosis"],["mouth","Mouthparts"],["order","Order"]],"c2 c4m")}</div>
+      <div><span class="opt-label">Mode</span>${segHTML("g-mode",[["beginner","Beginner: photo + name"],["advanced","Advanced: photo only"]],"c2")}</div>
+      <p class="hint" id="g-mode-hint"></p>
+      <button class="btn wide" id="g-start">Play</button>
+    </div>
+    <div class="panel"><h3>How to play</h3>
+      <ul class="changes">
+        <li>Swipe a bug toward a neighbor, or tap one bug and then a neighbor, to swap them.</li>
+        <li>Line up 3 or more in a row or column that share the category, like three Hemiptera.</li>
+        <li>A swap that doesn’t match costs 10 points and a move, and shows you what each bug really is.</li>
+        <li>Press and hold a bug to see it up close.</li>
+        <li>Reach the level’s target in ${G_MOVES} moves to go up a level. Higher levels add more categories.</li>
+      </ul></div>
+    <div class="panel"><h3>Your best scores</h3>
+      <div class="tbl-wrap"><table><thead><tr><th>Match by</th><th>Beginner</th><th>Advanced</th></tr></thead><tbody>
+        ${Object.entries(GRULES).map(([k,r])=>`<tr><td>${r.label}</td><td>${cell(k+"-beginner")}</td><td>${cell(k+"-advanced")}</td></tr>`).join("")}
+      </tbody></table></div>
+      <p class="hint">Saved on this phone only.</p></div>`;
+  const hints = {beginner:"Each bubble shows the photo and the bug’s name. You supply the category.",
+    advanced:"Photo only. You have to recognize the bug and know its category. One “show names” hint per level, for 25 points."};
+  bindSeg($("#g-rule"), v=>G.rule=v); bindSeg($("#g-mode"), v=>{ G.mode=v; $("#g-mode-hint").textContent=hints[v]; });
+  setSeg($("#g-rule"),G.rule); setSeg($("#g-mode"),G.mode); $("#g-mode-hint").textContent=hints[G.mode];
+  $("#g-start").addEventListener("click", ()=>{ G.score=0; G.level=1; gStartLevel(); });
+}
+
+function gStartLevel(){
+  Object.assign(G, {active:true, busy:false, moves:G_MOVES, lp:0, hintUsed:false, sel:null, log:[]});
+  G.values = gLevelValues(G.rule, G.level);
+  G.target = gTarget(G.values.length, G.level);
+  G.pool = Object.fromEntries(G.values.map(v=>[v, SPECS.filter(s=>GRULES[G.rule].get(s)===v)]));
+  G.values.forEach(v=>G.pool[v].forEach(s=>{ const im=new Image(); im.src=`game/${s.id}.webp`; }));
+  const R = GRULES[G.rule];
+  $("#v-game").innerHTML = `
+    <div class="g-hud">
+      <div><span class="k">Level</span><b id="g-level">${G.level}</b></div>
+      <div><span class="k">Score</span><b id="g-score">${G.score.toLocaleString()}</b></div>
+      <div><span class="k">Moves</span><b id="g-moves">${G.moves}</b></div>
+    </div>
+    <div class="g-goal"><div class="bar"><i id="g-bar"></i></div><span class="mono" id="g-goal"></span></div>
+    <div class="g-rule"><span>Match by <b>${R.label}</b></span>${G.values.map(v=>`<span class="g-chip" style="--cc:${gColor(G.rule,v)}">${R.name(v)}</span>`).join("")}</div>
+    <div class="g-msg" id="g-msg" aria-live="polite"></div>
+    <div class="g-wrap" id="g-wrap"><div class="g-board${G.mode==="beginner"?" names":""}" id="g-board"></div><div class="g-over" id="g-over" hidden></div></div>
+    <div class="row-btns">${G.mode==="advanced"?`<button class="btn ghost" id="g-hint">Show names −25</button>`:""}<button class="btn ghost" id="g-quit">Quit</button></div>
+    <div class="g-log" id="g-log"></div>
+    <div class="g-zoom" id="g-zoom" hidden></div>`;
+  $("#g-quit").addEventListener("click", ()=>{ G.active=false; gSaveBest(); renderGameSetup(); });
+  const hb=$("#g-hint"); if(hb) hb.addEventListener("click", gHint);
+  gNewBoard(); gHud(); gBindBoard();
+  window.scrollTo(0,0);
+}
+
+/* ---- board model: G.b[r][c] = {id, v, f, el} ---- */
+const gVals = () => G.b.map(row=>row.map(p=>p?p.v:null));
+function gPick(v){
+  const on = new Set(G.b.flat().filter(Boolean).map(p=>p.id));
+  const pool = G.pool[v], fresh = pool.filter(s=>!on.has(s.id));
+  const s = (fresh.length ? fresh : pool)[Math.floor(Math.random()*(fresh.length?fresh.length:pool.length))];
+  return {id:s.id, v, f:Math.floor(Math.random()*gTiles(s.id))};
+}
+function gNewBoard(){
+  let g; do { g = gFill(G.values, Math.random); } while(!gMoves(g).length);
+  $("#g-board").innerHTML = "";
+  G.b = g.map(row=>row.map(()=>null));
+  for(let r=0;r<GROWS;r++) for(let c=0;c<GCOLS;c++){ const p=gPick(g[r][c]); G.b[r][c]=p; gMakeEl(p); }
+  gLayout(true);
+}
+function gMakeEl(p){
+  const s = BY_ID[p.id];
+  const el = document.createElement("div");
+  el.className = "gb";
+  el.innerHTML = `<div class="gb-c"><div class="gb-ph" style="${gPhotoStyle(p.id,p.f)}"></div><div class="gb-tint"></div><div class="gb-cat"></div></div><div class="gb-name">${esc(s.name)}${s.imm?" ("+s.stage+")":""}</div>`;
+  el._p = p; p.el = el;
+  $("#g-board").appendChild(el);
+  return el;
+}
+function gSize(){
+  const wrap = $("#g-wrap"); if(!wrap) return;
+  const ratio = G.mode==="beginner" ? 1.45 : 1;
+  let cw = Math.floor(Math.min(wrap.clientWidth, 560) / GCOLS);
+  const top = wrap.getBoundingClientRect().top + window.scrollY;
+  const avail = window.innerHeight - 62 - 70 - Math.min(top, 260);
+  if(avail > 280 && G.mode!=="beginner") cw = Math.min(cw, Math.floor(avail / GROWS / ratio));
+  G.cw = Math.max(40, cw); G.ch = Math.round(G.cw*ratio);
+  const bd = $("#g-board"); bd.style.width = GCOLS*G.cw+"px"; bd.style.height = GROWS*G.ch+"px";
+  bd.style.setProperty("--cw", G.cw+"px"); bd.style.setProperty("--ch", G.ch+"px");
+}
+function gPos(p, r, c){ p.r=r; p.c=c; p.el.style.transform = `translate(${c*G.cw}px,${r*G.ch}px)`; }
+function gLayout(instant){
+  gSize();
+  for(let r=0;r<GROWS;r++) for(let c=0;c<GCOLS;c++){ const p=G.b[r][c]; if(!p) continue;
+    if(instant) p.el.style.transition="none"; gPos(p,r,c); if(instant){ p.el.offsetWidth; p.el.style.transition=""; } }
+}
+window.addEventListener("resize", ()=>{ if(G.active && $("#g-board")) gLayout(true); });
+
+function gHud(){
+  $("#g-score").textContent = G.score.toLocaleString();
+  $("#g-moves").textContent = G.moves;
+  $("#g-goal").textContent = `${Math.min(G.lp,G.target).toLocaleString()} / ${G.target.toLocaleString()}`;
+  $("#g-bar").style.width = Math.min(100, G.lp/G.target*100)+"%";
+}
+function gMsg(html, kind){ const m=$("#g-msg"); m.className="g-msg"+(kind?" "+kind:""); m.innerHTML=html; }
+
+/* ---- input: swipe, tap-tap, long-press zoom ---- */
+function gBindBoard(){
+  const bd = $("#g-board"); let st = null;
+  bd.addEventListener("pointerdown", e=>{
+    const el = e.target.closest(".gb"); if(!el || G.busy || !G.active) return;
+    e.preventDefault();
+    st = {p:el._p, x:e.clientX, y:e.clientY, lp:false, id:e.pointerId};
+    st.t = setTimeout(()=>{ if(st){ st.lp=true; gZoom(st.p); } }, 450);
+    try{ bd.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  bd.addEventListener("pointermove", e=>{
+    if(!st || st.lp) return;
+    const dx=e.clientX-st.x, dy=e.clientY-st.y;
+    if(Math.max(Math.abs(dx),Math.abs(dy)) < 16) return;
+    clearTimeout(st.t);
+    const p=st.p; st=null; gSelect(null);
+    const [dr,dc] = Math.abs(dx)>Math.abs(dy) ? [0,Math.sign(dx)] : [Math.sign(dy),0];
+    const r2=p.r+dr, c2=p.c+dc;
+    if(r2>=0 && r2<GROWS && c2>=0 && c2<GCOLS) gTrySwap(p, G.b[r2][c2]);
+  });
+  const up = e=>{
+    if(!st) return; clearTimeout(st.t);
+    const s=st; st=null;
+    if(s.lp){ gZoom(null); return; }
+    if(e.type==="pointercancel") return;
+    const p=s.p, q=G.sel;
+    if(q && q!==p && Math.abs(q.r-p.r)+Math.abs(q.c-p.c)===1){ gSelect(null); gTrySwap(q,p); }
+    else gSelect(q===p ? null : p);
+  };
+  bd.addEventListener("pointerup", up); bd.addEventListener("pointercancel", up);
+  bd.addEventListener("contextmenu", e=>e.preventDefault());
+}
+function gSelect(p){ if(G.sel) G.sel.el.classList.remove("sel"); G.sel=p; if(p) p.el.classList.add("sel"); }
+function gZoom(p){
+  const z=$("#g-zoom"); if(!p){ z.hidden=true; return; }
+  const s=BY_ID[p.id];
+  z.innerHTML = `<div class="gz-ph" style="${gPhotoStyle(p.id,p.f)}"></div>${G.mode==="beginner"?`<div class="gz-name">${esc(label(s))}</div>`:""}`;
+  z.hidden=false;
+}
+function gHint(){
+  if(G.hintUsed || G.busy) return;
+  G.hintUsed=true; G.score=Math.max(0,G.score-25); G.lp=Math.max(0,G.lp-25); gHud();
+  $("#g-hint").disabled=true;
+  $("#g-board").classList.add("names");
+  setTimeout(()=>{ const b=$("#g-board"); if(b && G.mode==="advanced") b.classList.remove("names"); }, 3500);
+}
+
+/* ---- moves ---- */
+function gReveal(p, on, withLabel){
+  const R=GRULES[G.rule];
+  p.el.style.setProperty("--cc", gColor(G.rule,p.v));
+  p.el.querySelector(".gb-cat").textContent = withLabel ? R.name(p.v) : "";
+  p.el.classList.toggle("reveal", on);
+  p.el.classList.toggle("lbl", !!(on && withLabel));
+}
+async function gTrySwap(a, b){
+  if(G.busy || !G.active || !a || !b) return;
+  G.busy=true;
+  const ar=a.r, ac=a.c, br=b.r, bc=b.c;
+  G.b[ar][ac]=b; G.b[br][bc]=a; gPos(a,br,bc); gPos(b,ar,ac);
+  await sleep(gReduced()?40:200);
+  if(!gFindRuns(gVals()).length){
+    /* wrong move: explain using the bug that moved and the neighbor it was pushed next to */
+    G.moves--; G.score=Math.max(0,G.score-10); G.lp=Math.max(0,G.lp-10);
+    const R=GRULES[G.rule], dr=br-ar, dc=bc-ac;
+    const ahead = (G.b[br+dr]||[])[bc+dc];
+    const nb = (ahead && ahead.v!==a.v) ? ahead : ([[br+dr,bc+dc],[br+1,bc],[br-1,bc],[br,bc+1],[br,bc-1]].map(([r,c])=>(G.b[r]||[])[c]).find(q=>q && q!==b && q.v!==a.v) || ahead);
+    gReveal(a,true); if(nb) gReveal(nb,true);
+    const an=label(BY_ID[a.id]);
+    gMsg(nb ? `No match. <b>${esc(an)}</b> is ${R.name(a.v)}${nb.v===a.v?"":`, <b>${esc(label(BY_ID[nb.id]))}</b> is ${R.name(nb.v)}`}. <span class="mono">−10</span>`
+            : `No match. <b>${esc(an)}</b> is ${R.name(a.v)}. <span class="mono">−10</span>`, "bad");
+    const rec=P.s[a.id]||(P.s[a.id]={n:0,m:{}}); rec.n++; rec.m.game=(rec.m.game||0)+1; saveP();
+    G.b[ar][ac]=a; G.b[br][bc]=b; gPos(a,ar,ac); gPos(b,br,bc);
+    gHud();
+    await sleep(1400);
+    gReveal(a,false); if(nb) gReveal(nb,false);
+    G.busy=false; gCheckEnd();
+    return;
+  }
+  G.moves--; gHud();
+  await gResolve();
+  G.busy=false; gCheckEnd();
+}
+async function gResolve(){
+  const R=GRULES[G.rule]; let combo=1, total=0;
+  while(true){
+    const runs = gFindRuns(gVals()); if(!runs.length) break;
+    const kill = new Set(); let pts=0;
+    runs.forEach(run=>{ pts += gRunPts(run.cells.length, combo);
+      run.cells.forEach(([r,c])=>kill.add(G.b[r][c]));
+      G.log.unshift({v:run.v, ids:run.cells.map(([r,c])=>G.b[r][c].id)}); });
+    kill.forEach(p=>gReveal(p,true,false));
+    runs.forEach(run=>{ const [r,c]=run.cells[Math.floor(run.cells.length/2)]; gReveal(G.b[r][c],true,true); });
+    total += pts;
+    const names = runs.map(run=>`<b style="color:${gColor(G.rule,run.v)}">${R.name(run.v)}</b> ×${run.cells.length}`).join(" · ");
+    gMsg(`${names} <span class="mono">+${pts}</span>${combo>1?` <span class="g-combo">combo ×${Math.min(3,1+0.5*(combo-1))}</span>`:""}`, "good");
+    G.score+=pts; G.lp+=pts; gHud(); gRenderLog();
+    await sleep(gReduced()?250:560);
+    kill.forEach(p=>{ p.el.classList.add("pop"); G.b[p.r][p.c]=null; });
+    await sleep(gReduced()?30:170);
+    kill.forEach(p=>p.el.remove());
+    gGravity();
+    await sleep(gReduced()?40:320);
+    combo++;
+  }
+  return total;
+}
+function gGravity(){
+  const tops=[];
+  for(let c=0;c<GCOLS;c++){
+    const col=[]; for(let r=GROWS-1;r>=0;r--) if(G.b[r][c]) col.push(G.b[r][c]);
+    let r=GROWS-1; col.forEach(p=>{ G.b[r][c]=p; gPos(p,r,c); r--; });
+    for(let y=r; y>=0; y--) G.b[y][c]=null;
+    tops.push(r);
+  }
+  /* new bugs drop in without making ready-made matches */
+  for(let c=0;c<GCOLS;c++) for(let r=tops[c], k=1; r>=0; r--, k++){
+    const p=gPick(gSafeValue(gVals(), r, c, G.values, Math.random));
+    G.b[r][c]=p; gMakeEl(p);
+    p.el.style.transition="none"; p.el.style.transform=`translate(${c*G.cw}px,${-k*G.ch}px)`;
+    p.el.offsetWidth; p.el.style.transition=""; gPos(p,r,c);
+  }
+}
+function gRenderLog(){
+  const R=GRULES[G.rule];
+  $("#g-log").innerHTML = G.log.slice(0,4).map(e=>`<div class="g-log-row"><span class="g-chip" style="--cc:${gColor(G.rule,e.v)}">${R.name(e.v)}</span><span>${e.ids.map(id=>esc(label(BY_ID[id]))).join(", ")}</span></div>`).join("");
+}
+function gSaveBest(){
+  P.best = P.best || {};
+  const b = P.best[gKey()];
+  const isNew = G.score>0 && (!b || G.score>b.score);
+  if(isNew){ P.best[gKey()] = {score:G.score, level:G.level, t:Date.now()}; saveP(); }
+  return isNew;
+}
+function gCheckEnd(){
+  if(!G.active) return;
+  if(G.lp >= G.target){
+    const bonus = G.moves*20; G.score += bonus; gHud();
+    G.busy=true; gSaveBest();
+    gOver(`<div class="kicker">Level ${G.level} cleared</div><div class="big-score mono">${G.score.toLocaleString()}</div>
+      <p class="hint">${G.moves} move${G.moves===1?"":"s"} left: +${bonus} bonus</p>
+      <button class="btn wide" id="g-next">Level ${G.level+1}</button>`);
+    $("#g-next").addEventListener("click", ()=>{ G.level++; gStartLevel(); });
+    return;
+  }
+  if(G.moves<=0){
+    G.busy=true; G.active=false;
+    const best = gSaveBest(), b=(P.best||{})[gKey()];
+    gOver(`<div class="kicker">Out of moves</div><div class="big-score mono">${G.score.toLocaleString()}</div>
+      <p class="hint">Reached level ${G.level}. ${best?"<b>New personal best!</b>":`Best: ${b?b.score.toLocaleString():0}`}</p>
+      <div class="row-btns"><button class="btn ghost" id="g-menu">Change game</button><button class="btn" id="g-again">Play again</button></div>`);
+    $("#g-again").addEventListener("click", ()=>{ G.score=0; G.level=1; gStartLevel(); });
+    $("#g-menu").addEventListener("click", renderGameSetup);
+    return;
+  }
+  if(!gMoves(gVals()).length){
+    gMsg("No moves left. New bugs coming in.", "");
+    G.b.flat().forEach(p=>p.el.remove()); gNewBoard();
+  }
+}
+function gOver(html){ const o=$("#g-over"); o.innerHTML=`<div class="g-over-card">${html}</div>`; o.hidden=false; }
 
 /* ===================== BOOT ===================== */
 fillFilters(); renderList();
